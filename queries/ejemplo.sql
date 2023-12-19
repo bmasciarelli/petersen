@@ -1,1 +1,1 @@
-select * from test.test
+select nombre from test.test
