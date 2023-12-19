@@ -202,8 +202,8 @@
         "name" : "prueba-registry",
         "outputPorts" : [ ],
         "position" : {
-          "x" : 438.0,
-          "y" : 38.0
+          "x" : 471.0,
+          "y" : -73.0
         },
         "processGroups" : [ ],
         "processors" : [ {
@@ -338,7 +338,7 @@
             "y" : -90.4669655657764
           },
           "properties" : {
-            "Command" : "/home/ec2-user/nifi/repositorios/clona-repo.sh",
+            "Command" : "${script-clona-repo}",
             "Redirect Error Stream" : "true",
             "Argument Delimiter" : " ",
             "Command Arguments" : "${usuario} ${repo} ${rama}"
@@ -404,14 +404,14 @@
           "name" : "Obtiene Query",
           "penaltyDuration" : "30 sec",
           "position" : {
-            "x" : 559.1386743822363,
-            "y" : 130.31195103488233
+            "x" : 552.2465235033301,
+            "y" : 141.79895054660108
           },
           "properties" : {
             "Move Conflict Strategy" : "Replace File",
             "Log level when file not found" : "ERROR",
             "Log level when permission denied" : "ERROR",
-            "File to Fetch" : "/home/ec2-user/nifi/repositorios/bmasciarelli/petersen/queries/ejemplo.sql",
+            "File to Fetch" : "${ruta-repositorios}/${usuario}/${repo}/queries/ejemplo.sql",
             "Completion Strategy" : "None"
           },
           "propertyDescriptors" : {
@@ -461,9 +461,11 @@
         } ],
         "remoteProcessGroups" : [ ],
         "variables" : {
+          "ruta-repositorios" : "/home/ec2-user/nifi/repositorios",
           "rama" : "desarrollos/ejemplo",
           "repo" : "petersen",
-          "usuario" : "bmasciarelli"
+          "usuario" : "bmasciarelli",
+          "script-clona-repo" : "/home/ec2-user/nifi/repositorios/clona-repo.sh"
         }
       }
     }
