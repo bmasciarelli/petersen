@@ -1,6 +1,6 @@
 flows:
-  4a6ceaba-8f1a-4e58-9b80-de59d031dfec: {ver: 2, file: lectura-mysql.snapshot, comments: Parametrizacion
-      de los processors, author: anonymous, created: 1702999236020, flowName: lectura-mysql,
-    flowDesc: Lee datos de mysql}
+  4a6ceaba-8f1a-4e58-9b80-de59d031dfec: {ver: 3, file: lectura-mysql.snapshot, comments: Muevo
+      conexión a mysql fuera del process group, author: anonymous, created: 1703003283276,
+    flowName: lectura-mysql, flowDesc: Lee datos de mysql}
 layoutVer: 1
 bucketId: 49089fae-1a13-4f6b-b36f-2dd80e281f14
