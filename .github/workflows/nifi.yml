@@ -25,4 +25,4 @@ jobs:
           mkdir -p "$user_directory"
 
       - name: Clone Repository to User Directory
-        run: cp -R . "$user_directory/"
+        run: cp -R . "$user_directory"
