@@ -1,0 +1,28 @@
+name: Clone Repository on Pull Request
+
+on:
+  pull_request
+
+jobs:
+  clone-repo:
+    runs-on: [self-hosted, nifi]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set User Directory
+        id: set-directory
+        run: echo "::set-output name=directory::${{ github.actor }}"
+
+      - name: Prepare User Directory
+        run: |
+          user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}"
+          if [ -d "$user_directory" ]; then
+            echo "Deleting previous contents of $user_directory"
+            rm -rf "$user_directory"/*
+          fi
+          mkdir -p "$user_directory"
+
+      - name: Clone Repository to User Directory
+        run: cp -R . "${{ steps.set-directory.outputs.directory }}"
