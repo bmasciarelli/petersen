@@ -13,5 +13,8 @@ jobs:
       - name: Change Working Directory
         run: cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
 
+      - name: ver
+        run: ls -al
+        
       - name: Pull from Main
         run: git pull origin main
