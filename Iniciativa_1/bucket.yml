@@ -1,0 +1,6 @@
+flows:
+  55b9da05-41e9-4438-8758-d879e5ad2d74: {ver: 1, file: lectura-mysql.snapshot, comments: Primer
+      version, author: anonymous, created: 1703158758582, flowName: lectura-mysql,
+    flowDesc: Lee datos de MySQL}
+layoutVer: 1
+bucketId: 2711dc5c-f2bd-4dd1-844c-0b192b5cb677
