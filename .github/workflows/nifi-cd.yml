@@ -13,4 +13,4 @@ jobs:
       - name: Pull from Main
         run: |
           cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
-          git pull origin main
+          sudo git pull origin main
