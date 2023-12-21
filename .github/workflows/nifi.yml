@@ -17,7 +17,7 @@ jobs:
 
       - name: Prepare User Directory
         run: |
-          user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}"
+          user_directory="/home/ec2-user/nifi/repositorios/${{ github.event.repository.name }}/${{ steps.set-directory.outputs.directory }}"
           if [ -d "$user_directory" ]; then
             echo "Deleting previous contents of $user_directory"
             rm -rf "$user_directory"/*
@@ -26,5 +26,5 @@ jobs:
 
       - name: Clone Repository to User Directory
         run: |
-          user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}"
+          user_directory="/home/ec2-user/nifi/repositorios/${{ github.event.repository.name }}/${{ steps.set-directory.outputs.directory }}"
           cp -R . "$user_directory"
