@@ -24,7 +24,7 @@ jobs:
           fi
           mkdir -p "$user_directory"
 
-      - name: Clone Repository to User Directory
+      - name: Copia queries
         run: |
           user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}/${{ github.event.repository.name }}"
-          cp -R . "$user_directory"
+          cp -R queries "$user_directory"
