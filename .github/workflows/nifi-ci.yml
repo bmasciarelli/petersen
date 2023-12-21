@@ -11,13 +11,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
         
-      - name: Prueba
-        run: git diff --name-only ${{ github.event.before }} ${{ github.sha }}
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
+        # with:
+        #   since_last_remote_commit: true 
 
-      - name: Modified files
+      - name: List all changed files
         run: |
-          git fetch origin main:main
-          git diff --name-only --diff-filter=d main~ main
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
         
       - name: Prepare User Directory
         run: |
