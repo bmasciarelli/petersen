@@ -1,0 +1,17 @@
+name: Update On Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-on-merge:
+    runs-on: [self-hosted, nifi]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Pull from Main
+        run: git pull origin main
