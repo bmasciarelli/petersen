@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Change Working Directory
-        run: cd /home/ec2-user/nifi/repositorios/prod
+        run: cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
 
       - name: Pull from Main
         run: git pull origin main
