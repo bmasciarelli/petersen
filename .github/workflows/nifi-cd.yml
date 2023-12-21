@@ -9,15 +9,8 @@ jobs:
   update-on-merge:
     runs-on: [self-hosted, nifi]
 
-    steps:
-      - name: Change Working Directory
-        run: cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
-      
-      - name: donde
-        run: pwd
-
-      - name: ver
-        run: ls -al
-        
+steps:
       - name: Pull from Main
-        run: git pull origin main
+        run: |
+          cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
+          git pull origin main
