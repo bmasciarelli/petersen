@@ -8,9 +8,10 @@ on:
 jobs:
   update-on-merge:
     runs-on: [self-hosted, nifi]
+
     steps:
       - name: Change Working Directory
         run: cd /home/ec2-user/nifi/repositorios/prod
 
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Pull from Main
+        run: git pull origin main
