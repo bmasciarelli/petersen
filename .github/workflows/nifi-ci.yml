@@ -1,10 +1,7 @@
-name: Clone Repository on PR or Merge to Main
+name: Clone Repository on Pull Request
 
 on:
-  pull_request:
-  push:
-    branches:
-      - main
+  pull_request
 
 jobs:
   clone-repo:
@@ -12,28 +9,22 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        run: |
-          git fetch --prune --unshallow
-          git checkout main
-          git pull
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
-
+        uses: ./home/ec2-user/nifi/repositorios/checkout
+        
       - name: Get changed files
         id: changed-files
-        run: |
-          changed_files=$(git diff --name-only ${{ steps.extract_branch.outputs.branch }} $(git merge-base ${{ steps.extract_branch.outputs.branch }} main ))
-          echo "::set-output name=all_changed_files::${changed_files}"
+        uses: ./home/ec2-user/nifi/repositorios/changed-files
+        
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
+        # with:
+        #   since_last_remote_commit: true 
 
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
-
+        
       - name: Prepare User Directory
         run: |
           user_directory="/home/ec2-user/nifi/repositorios"
@@ -43,6 +34,7 @@ jobs:
           delete_directories=()
 
           # Identifica los directorios de Iniciativa y Subiniciativa de los archivos modificados
+          
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
               dir_name=$(dirname "$file")
@@ -72,6 +64,6 @@ jobs:
               dir_name=$(dirname "$file")
               dest_dir="$user_directory/$repo_name/$dir_name"
               mkdir -p "$dest_dir"
-              cp -R "$dir_name/." "$dest_dir"
+              cp -R "$dir_name" "$dest_dir"
             fi
           done
