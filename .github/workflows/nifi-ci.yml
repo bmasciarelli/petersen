@@ -11,20 +11,47 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set User Directory
-        id: set-directory
-        run: echo "::set-output name=directory::${{ github.actor }}"
-
       - name: Prepare User Directory
         run: |
-          user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}/${{ github.event.repository.name }}"
-          if [ -d "$user_directory" ]; then
-            echo "Deleting previous contents of $user_directory"
-            rm -rf "$user_directory"/*
-          fi
-          mkdir -p "$user_directory"
+          user_directory="/home/ec2-user/nifi/repositorios"
+          repo_name="${{ github.event.repository.name }}"
 
-      - name: Copia queries
+          # Lista de directorios a eliminar
+          delete_directories=()
+
+          # Identifica los directorios de Iniciativa y Subiniciativa de los archivos modificados
+          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          for file in $modified_files; do
+            if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
+              dir_name=$(dirname "$file")
+              delete_directories+=("$dir_name")
+            fi
+          done
+
+          # Elimina los directorios identificados
+          for delete_dir in "${delete_directories[@]}"; do
+            target_directory="$user_directory/$repo_name/$delete_dir"
+            if [ -d "$target_directory" ]; then
+              echo "Deleting previous contents of $target_directory"
+              rm -rf "$target_directory"
+            fi
+          done
+
+          # Crea el directorio
+          mkdir -p "$user_directory/$repo_name"
+
+      - name: Copia queries y ddl
         run: |
-          user_directory="/home/ec2-user/nifi/repositorios/${{ steps.set-directory.outputs.directory }}/${{ github.event.repository.name }}"
-          cp -R queries "$user_directory"
+          user_directory="/home/ec2-user/nifi/repositorios"
+          repo_name="${{ github.event.repository.name }}"
+
+          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+          for file in $modified_files; do
+            if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
+              dir_name=$(dirname "$file")
+              dest_dir="$user_directory/$repo_name/$dir_name"
+              mkdir -p "$dest_dir"
+              cp -R "$dir_name" "$dest_dir"
+            fi
+          done
