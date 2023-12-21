@@ -1,1 +1,1 @@
-select id from test.test
+select id, nombre from test.test
