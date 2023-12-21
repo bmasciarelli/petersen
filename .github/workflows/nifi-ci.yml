@@ -1,7 +1,10 @@
-name: Clone Repository on Pull Request
+name: Clone Repository on PR or Merge to Main
 
 on:
-  pull_request
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   clone-repo:
@@ -9,22 +12,30 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
-        
+        run: |
+          git fetch --prune --unshallow
+          git checkout main
+          git pull
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
-        
-        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
-        # with:
-        #   since_last_remote_commit: true 
+        run: |
+          notMainDev=${{ steps.extract_branch.outputs.branch }}
+          mainDev=main
+          changed_files=$(git diff --name-only ${{ notMainDev }} $(git merge-base ${{ notMainDev }} ${{ mainDev }}))
+          echo "::set-output name=all_changed_files::${changed_files}"
 
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
-        
+
       - name: Prepare User Directory
         run: |
           user_directory="/home/ec2-user/nifi/repositorios"
@@ -34,7 +45,6 @@ jobs:
           delete_directories=()
 
           # Identifica los directorios de Iniciativa y Subiniciativa de los archivos modificados
-          
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
               dir_name=$(dirname "$file")
