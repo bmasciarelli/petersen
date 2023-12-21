@@ -10,7 +10,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        
+      - name: Prueba
+        run: git diff --name-only ${{ github.event.before }} ${{ github.sha }}
 
+      - name: Modified files
+        run: |
+          git fetch origin main:main
+          git diff --name-only --diff-filter=d main~ main
+        
       - name: Prepare User Directory
         run: |
           user_directory="/home/ec2-user/nifi/repositorios"
