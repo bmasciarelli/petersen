@@ -9,11 +9,11 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: ./home/ec2-user/nifi/repositorios/checkout
+        uses: actions/checkout@v4
         
       - name: Get changed files
         id: changed-files
-        uses: ./home/ec2-user/nifi/repositorios/changed-files
+        uses: tj-actions/changed-files@v40
         
         # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
         # with:
@@ -64,6 +64,6 @@ jobs:
               dir_name=$(dirname "$file")
               dest_dir="$user_directory/$repo_name/$dir_name"
               mkdir -p "$dest_dir"
-              cp -R "$dir_name" "$dest_dir"
+              cp -R "$dir_name/." "$dest_dir"
             fi
           done
