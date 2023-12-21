@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Get changed files
         id: changed-files
@@ -34,8 +34,8 @@ jobs:
           delete_directories=()
 
           # Identifica los directorios de Iniciativa y Subiniciativa de los archivos modificados
-          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          for file in $modified_files; do
+          
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
               dir_name=$(dirname "$file")
               delete_directories+=("$dir_name")
@@ -59,9 +59,7 @@ jobs:
           user_directory="/home/ec2-user/nifi/repositorios"
           repo_name="${{ github.event.repository.name }}"
 
-          modified_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-
-          for file in $modified_files; do
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             if [[ $file =~ ^[^/]+/[^/]+/ ]]; then
               dir_name=$(dirname "$file")
               dest_dir="$user_directory/$repo_name/$dir_name"
