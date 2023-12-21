@@ -9,7 +9,7 @@ jobs:
   update-on-merge:
     runs-on: [self-hosted, nifi]
 
-steps:
+    steps:
       - name: Pull from Main
         run: |
           cd /home/ec2-user/nifi/repositorios/prod/${{ github.event.repository.name }}
