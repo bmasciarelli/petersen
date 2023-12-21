@@ -1,1 +1,1 @@
-select id from test.test
+select * from test.test
