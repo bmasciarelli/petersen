@@ -64,6 +64,6 @@ jobs:
               dir_name=$(dirname "$file")
               dest_dir="$user_directory/$repo_name/$dir_name"
               mkdir -p "$dest_dir"
-              cp -R "$dir_name" "$dest_dir"
+              cp -R "$dir_name/." "$dest_dir"
             fi
           done
